@@ -1124,7 +1124,7 @@
             </div>
 
             <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-              <div data-netlify-recaptcha="true" style="display: inline-block;"></div>
+              <div data-netlify-recaptcha="true" style="display: inline-block;" aria-required="true"></div>
             </div>
 
             <div class="text-center mt-4">
@@ -1267,6 +1267,12 @@
     function handleFormSubmit(event) {
       event.preventDefault();
       const form = event.target;
+      const recaptchaResponse = document.querySelector("[name='g-recaptcha-response']");
+
+      if (!recaptchaResponse || recaptchaResponse.value === "") {
+        alert("Please complete the reCAPTCHA verification before submitting.");
+        return;
+      }
       
       fetch("/", {
         method: "POST",
