@@ -79,7 +79,7 @@
   <!-- ======= Hero Section ======= -->
   <section id="hero">
     <div class="hero-container" data-aos="zoom-in" data-aos-delay="100">
-      <a href="index.html" class="scrollto mb-4 pb-0"><img src="assets/img/colors-Theme_2.png" alt="" title=""></a>
+      <img src="assets/img/colors-Theme_2.png" class="mb-4 pb-0" alt="" title="">
       <!-- <h1 class="mb-4 pb-0">COLORS<br><span>FASHION</span> WKND</h1> -->
       <p class="mb-4 pb-0">Ibadan, Nigeria</p>
       <!-- <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4"></a> -->
@@ -1058,7 +1058,7 @@
 
         <div class="section-header">
           <h2>Contact Us</h2>
-          <!-- <p>Nihil officia ut sint molestiae tenetur.</p> -->
+          <p></p>
         </div>
 
         <div class="row contact-info">
@@ -1090,7 +1090,13 @@
         </div>
 
         <div class="form">
-          <form name="contact" method="POST" data-netlify="true" class="php-email-form">            
+
+          <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" class="php-email-form" onsubmit="return handleFormSubmit(event)">
+            <input type="hidden" name="form-name" value="contact">
+            <p style="display: none;">
+              <label>Don’t fill this out: <input name="bot-field"></label>
+            </p>
+
             <div class="row">
               <div class="form-group col-md-6">
                 <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -1099,18 +1105,34 @@
                 <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
               </div>
             </div>
+
             <div class="form-group mt-3">
               <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
             </div>
+
             <div class="form-group mt-3">
               <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
             </div>
-            <div class="my-3"></div>
-            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+
+            <div class="my-3">
+              <div id="success-message" style="display: none; color: green; text-align: center;">
+                ✅ Your message has been sent successfully!
+              </div>
+              <div id="error-message" style="display: none; color: red; text-align: center;">
+                ❌ Oops! Something went wrong. Please try again.
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 5px;">
               <div data-netlify-recaptcha="true" style="display: inline-block;"></div>
             </div>
-            <div class="text-center"><button type="submit">Send Message</button></div>
+
+            <div class="text-center">
+              <button type="submit">Send Message</button>
+            </div>
+          
           </form>
+        
         </div>
 
       </div>
@@ -1195,8 +1217,9 @@
   <!-- Flutterwave SDK Script -->
   <script src="https://checkout.flutterwave.com/v3.js"></script>
 
-  <!-- Flutterwave file -->
+  <!-- JavaScript file -->
   <script>
+    // Flutterwave Script
     function handlePayment() {
       const form = document.getElementById("payment-form");
       const formData = new FormData(form);
@@ -1237,6 +1260,26 @@
         onclose: function() {
           alert("Payment window closed.");
         },
+      });
+    }
+
+    // Contact Form
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      
+      fetch("/", {
+        method: "POST",
+        body: new FormData(form),
+      })
+      .then(() => {
+        document.getElementById("success-message").style.display = "block";
+        document.getElementById("error-message").style.display = "none";
+        form.reset();
+      })
+      .catch(() => {
+        document.getElementById("error-message").style.display = "block";
+        document.getElementById("success-message").style.display = "none";
       });
     }
   </script>  
