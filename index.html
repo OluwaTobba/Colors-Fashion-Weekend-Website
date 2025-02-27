@@ -960,7 +960,7 @@
                   <!-- <li><span class="fa-li"><i class="fa fa-check"></i></span>Networking opportunities with industry experts</li> -->
                 </ul>
                 <hr>
-                
+
                 <div class="text-center">
                   <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#buy-ticket-modal" data-ticket-type="premium-access">Get Discounted Ticket</button>
                 </div>
@@ -1008,22 +1008,22 @@
 
             <div class="modal-body">
 
-              <form name="tickets" method="POST" netlify>
+              <form name="ticket-payment" method="POST" data-netlify="true" id="payment-form">
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="your-name" placeholder="Your Name">
+                  <input type="text" class="form-control" name="your-name" placeholder="Your Name" required>
                 </div>
 
                 <div class="form-group mt-3">
-                  <input type="text" class="form-control" name="your-email" placeholder="Your Email">
+                  <input type="text" class="form-control" name="your-email" placeholder="Your Email" required>
                 </div>
 
                 <div class="form-group mt-3">
-                  <select id="ticket-type" name="ticket-type" class="form-select">
+                  <select name="ticket-type" id="ticket-type" class="form-select" required>
                     <!-- <option value="">-- Select Your Ticket Type --</option> -->
-                    <option value="standard-access">Standard Access</option>
+                    <option value="5000">Standard Access - ₦5,000</option>
                     <!-- <option value="pro-access">Pro Access</option> -->
-                    <option value="premium-access">Premium Access</option>
+                    <option value="7000">Premium Access - ₦7,000</option>
                   </select>
                 </div>
 
@@ -1032,10 +1032,10 @@
                       ✅ After completing your payment, kindly send proof of payment to WhatsApp: 
                       <strong>+2347014797700</strong> for verification.
                   </p>
-              </div>
+                </div>
 
                 <div class="text-center mt-3">
-                  <button type="submit" class="btn">Proceed to Pay</button>
+                  <button type="button" class="btn" onclick="handlePayment()">Proceed to Pay</button>
                 </div>
 
               </form>
@@ -1190,6 +1190,56 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  
+  <!-- Flutterwave SDK Script -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+  <!-- Flutterwave file -->
+  <script>
+    function handlePayment() {
+      const form = document.getElementById("payment-form");
+      const formData = new FormData(form);
+      
+      const ticketType = formData.get("ticket-type"); // Get selected ticket price
+      const ticketName = ticketType === "5000" ? "Basic Access" : "Premium Access"; // Define ticket name
+  
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK_TEST-ef3112ec977af3390eb1f26159077aab-X",
+        tx_ref: "COLORS_WKND_" + Date.now(),
+        amount: parseInt(ticketType),
+        currency: "NGN",
+        payment_options: "card, banktransfer",
+        customer: {
+          name: formData.get("name"),
+          email: formData.get("email"),
+        },
+        customizations: {
+          title: "Colors WKND Ticket",
+          description: `Payment for ${ticketName}`,
+          logo: "https://colorsfashionwknd.netlify.app/assets/img/colors-Theme_2.png",
+        },
+        callback: function(response) {
+          if (response.status === "successful") {
+            fetch("/", {
+              method: "POST",
+              body: formData,
+            })
+            .then(() => {
+              alert("Payment Successful! Your details have been submitted.");
+              form.reset();
+            })
+            .catch(error => console.error("Error submitting form:", error));
+          } else {
+            alert("Payment Failed. Please try again.");
+          }
+        },
+        onclose: function() {
+          alert("Payment window closed.");
+        },
+      });
+    }
+  </script>  
 
 </body>
 
