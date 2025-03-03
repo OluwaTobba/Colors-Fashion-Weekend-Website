@@ -1201,53 +1201,60 @@
       const formData = new FormData(form);
       
       const ticketType = formData.get("ticket-type");
+
+      let ticketName, ticketAmount;
       switch (ticketType) {
-        case "Day-1 Access":
-            ticketName = "Standard Access";
-            break;
-        case "Day-2 Access":
-            ticketName = "Pro Access";
-            break;
-        case "Both-day Access":
-            ticketName = "Premium Access";
-            break;
-        default:
-            ticketName = "Unknown Ticket";
+          case "Day-1 Access":
+              ticketName = "Standard Access";
+              ticketAmount = 5000;
+              break;
+          case "Day-2 Access":
+              ticketName = "Pro Access";
+              ticketAmount = 5000;
+              break;
+          case "Both-day Access":
+              ticketName = "Premium Access";
+              ticketAmount = 7000;
+              break;
+          default:
+              alert("Invalid ticket selection.");
+              return;
       }
-  
+
       FlutterwaveCheckout({
-        public_key: "FLWPUBK_TEST-ef3112ec977af3390eb1f26159077aab-X",
-        tx_ref: "COLORS_WKND_" + Date.now(),
-        amount: parseInt(ticketType),
-        currency: "NGN",
-        payment_options: "card, banktransfer",
-        customer: {
-          name: formData.get("name"),
-          email: formData.get("email"),
-        },
-        customizations: {
-          title: "Colors WKND Ticket",
-          description: `Payment for ${ticketName}`,
-          logo: "https://colorsfashionwknd.netlify.app/assets/img/colors-Theme_2.png",
-        },
-        callback: function(response) {
-          if (response.status === "successful") {
-            fetch("/", {
-              method: "POST",
-              body: formData,
-            })
-            .then(() => {
-              alert("Payment Successful! Your details have been submitted.");
-              form.reset();
-            })
-            .catch(error => console.error("Error submitting form:", error));
-          } else {
-            alert("Payment Failed. Please try again.");
-          }
-        },
-        onclose: function() {
-          alert("Payment window closed.");
-        },
+          public_key: "FLWPUBK_TEST-ef3112ec977af3390eb1f26159077aab-X",
+          tx_ref: "COLORS_WKND_" + Date.now(),
+          amount: ticketAmount,
+          currency: "NGN",
+          payment_options: "card, banktransfer",
+          customer: {
+              name: formData.get("name"),
+              email: formData.get("email"),
+          },
+          customizations: {
+              title: "Colors WKND Ticket",
+              description: `Payment for ${ticketName}`,
+              logo: "https://colorsfashionwknd.netlify.app/assets/img/colors-Theme_2.png",
+          },
+          callback: function(response) {
+              if (response.status === "successful") {
+                  formData.append("ticket-type", ticketName);
+                  fetch("/", {
+                      method: "POST",
+                      body: formData,
+                  })
+                  .then(() => {
+                      alert("Payment Successful! Your details have been submitted.");
+                      form.reset();
+                  })
+                  .catch(error => console.error("Error submitting form:", error));
+              } else {
+                  alert("Payment Failed. Please try again.");
+              }
+          },
+          onclose: function() {
+              alert("Payment window closed.");
+          },
       });
     }
 
