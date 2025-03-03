@@ -997,9 +997,9 @@
                 <div class="form-group mt-3">
                   <select name="ticket-type" id="ticket-type" class="form-select" required>
                     <!-- <option value="">-- Select Your Ticket Type --</option> -->
-                    <option value="5000">Standard Access - ₦5,000</option>
-                    <option value="5000">Pro Access - ₦5,000</option>
-                    <option value="7000">Premium Access - ₦7,000</option>
+                    <option value="Day-1 Access">Standard Access - ₦5,000</option>
+                    <option value="Day-2 Access">Pro Access - ₦5,000</option>
+                    <option value="Both-day Access">Premium Access - ₦7,000</option>
                   </select>
                 </div>
 
@@ -1202,13 +1202,13 @@
       
       const ticketType = formData.get("ticket-type");
       switch (ticketType) {
-        case "5000":
+        case "Day-1 Access":
             ticketName = "Standard Access";
             break;
-        case "5000":
+        case "Day-2 Access":
             ticketName = "Pro Access";
             break;
-        case "7000":
+        case "Both-day Access":
             ticketName = "Premium Access";
             break;
         default:
