@@ -50,5 +50,5 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-For any inquiries, contact us at [[michtobbacaresinc@example.com](mailto\:michtobbacaresinc@example.com)] or via WhatsApp: +2347014797700.
+For any inquiries, contact us at [[michtobbacaresinc@gmail.com](mailto\:michtobbacaresinc@gmail.com)] or via WhatsApp: +2349154680747.
 
