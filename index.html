@@ -1215,25 +1215,9 @@
       
       const ticketPrice = 5000;
       const ticketName = "Standard Access";
-          case "Day-1 Access":
-              ticketName = "Standard Access";
-              ticketAmount = 5000;
-              break;
-          case "Day-2 Access":
-              ticketName = "Pro Access";
-              ticketAmount = 5000;
-              break;
-          case "Both-day Access":
-              ticketName = "Premium Access";
-              ticketAmount = 7000;
-              break;
-          default:
-              alert("Invalid ticket selection.");
-              return;
-      }
 
       FlutterwaveCheckout({
-          public_key: "FLWPUBK-5b3ec75f45a4210d3d16c73ca4310998-X",
+          public_key: "FLWPUBK-77337727139b45c9dd5051c72ba881d8-X",
           tx_ref: "COLORS_WKND_" + Date.now(),
           amount: ticketPrice,
           currency: "NGN",
@@ -1249,7 +1233,6 @@
           },
           callback: function(response) {
               if (response.status === "successful") {
-                  formData.append("ticket-type", ticketName);
                   fetch("/", {
                       method: "POST",
                       body: formData,
